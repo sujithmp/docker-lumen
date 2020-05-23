@@ -22,6 +22,9 @@ services:
   postgres:
     image: postgres:9.6-alpine
     container_name: postgres
+    volume:
+      - volumes: 
+      - postgres:/var/lib/postgresql/data
     restart: unless-stopped
     tty: true
     ports:
@@ -46,3 +49,23 @@ services:
       - "9000:9000"
     networks:
       - laravel    
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./src:/var/www
+    working_dir: /var/www
+    networks:
+      - laravel
+  npm:
+    image: node:13.7
+    container_name: npm 
+    volumes:
+     - ./src:/var/www
+    working_dir: /var/www
+    entrypoint: ['npm']                        
+    networks:
+      - laravel
+
+volumes: 
+  postgres:
